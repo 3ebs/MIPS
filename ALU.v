@@ -12,7 +12,7 @@ parameter SLL 	= 3'b010;
 parameter NOR  	= 3'b011;
 parameter AND  	= 3'b100;
 parameter SLT  	= 3'b101;
-
+parameter dontcare = 3'bxxx;
 always @(*)
 begin
 
@@ -45,6 +45,11 @@ case(alu_control_signal)
 				out <= (opA<opB)? 1 : 0 ;
 				zero <= ( out == 0 ) ? 1 : 0;
 			end
+	dontcare : 
+				begin
+				 out <= 0 ;
+					zero <= 0 ;
+				end
 	endcase
 
 
