@@ -10,6 +10,6 @@ module DataMemory (addr, data_in, data_out, rd, wr);
 		else if  (!wr & rd) 
 			data_out = my_memory[addr];
 			
-			$writememh ("memory.list", my_memory);
+			$writememb ("memory.list", my_memory);
 	end
 endmodule
