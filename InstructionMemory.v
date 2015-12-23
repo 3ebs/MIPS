@@ -23,6 +23,6 @@ module InstructionMemory(address, to_ctrl, to_rs, to_rt, to_rd, to_shamt, to_fun
 		to_sign_ext = tempreg[15:0];
 	end
 	initial begin
-		$readmemh ("memory.list", my_memory);;
+		$readmemh ("memory.list", my_memory);
 	end
 endmodule

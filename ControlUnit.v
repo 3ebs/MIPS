@@ -1,11 +1,11 @@
 
-module control_unit(OpCode, RegWrite, RegDst, AluSrc, AluOp, branch, MemWrite, MemRead, MemToReg, jump);
+module control_unit(OpCode, RegWrite, RegDst, AluSrc, AluOp, branch, MemWrite, MemRead, MemToReg, jump, arith);
 	input [5:0]OpCode;
-	output RegWrite, jump, branch, MemRead, MemWrite, AluSrc;
+	output RegWrite, jump, branch, MemRead, MemWrite, AluSrc, arith;
 	output [1:0]RegDst;
 	output [2:0]AluOp;
 	output [1:0]MemToReg;
-	reg	RegWrite, jump, branch, MemRead, MemWrite, AluSrc;
+	reg	RegWrite, jump, branch, MemRead, MemWrite, AluSrc, arith;
 	reg [1:0]RegDst;
 	reg [2:0]AluOp;
 	reg [1:0]MemToReg;
@@ -21,6 +21,7 @@ module control_unit(OpCode, RegWrite, RegDst, AluSrc, AluOp, branch, MemWrite, M
 				MemRead=0;
 				MemToReg=2'b01;
 				jump=0;
+				arith = 1'bx;
 			end	 
 			6'b001000 : begin//addi 
 				RegWrite=1;
@@ -31,8 +32,8 @@ module control_unit(OpCode, RegWrite, RegDst, AluSrc, AluOp, branch, MemWrite, M
 				MemWrite=0;
 				MemRead=0;
 				MemToReg=2'b01;
-			    jump=0;
-			    
+				jump=0;
+			    	arith = 1;
 			end
 			6'b001100: begin//andi
 				RegWrite=1;
@@ -43,7 +44,8 @@ module control_unit(OpCode, RegWrite, RegDst, AluSrc, AluOp, branch, MemWrite, M
 				MemWrite=0;
 				MemRead=0;
 				MemToReg=2'b01;
-			    jump=0;
+			    	jump=0;
+			    	arith = 0;
 			end
 			6'b000100 : begin//beq 
 				RegWrite=0;
@@ -54,7 +56,8 @@ module control_unit(OpCode, RegWrite, RegDst, AluSrc, AluOp, branch, MemWrite, M
 				MemWrite=0;
 				MemRead=0;
 				MemToReg=2'bxx;
-			    jump=0;
+			    	jump=0;
+			    	arith = 1'bx;
 			end
 			6'b000011 : begin//jal 
 				RegWrite=1;
@@ -65,7 +68,8 @@ module control_unit(OpCode, RegWrite, RegDst, AluSrc, AluOp, branch, MemWrite, M
 				MemWrite=0;
 				MemRead=0;
 				MemToReg=2'b10;
-				jump=1;	
+				jump=1;
+				arith = 1'bx;
 			end	
 			6'b100011 : begin//lw 
 				RegWrite=1;
@@ -76,7 +80,8 @@ module control_unit(OpCode, RegWrite, RegDst, AluSrc, AluOp, branch, MemWrite, M
 				MemWrite=0;
 				MemRead=1;
 				MemToReg=2'b00;
-				jump=0;	
+				jump=0;
+				arith = 1'bx;
 			end	
 			6'b101011 : begin//sw 
 				RegWrite=0;
@@ -88,6 +93,7 @@ module control_unit(OpCode, RegWrite, RegDst, AluSrc, AluOp, branch, MemWrite, M
 				MemRead=0;
 				MemToReg=1'bx;
 				jump=0;
+				arith = 1'bx;
 			end
 		endcase
 	endmodule
