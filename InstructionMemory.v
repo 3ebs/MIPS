@@ -9,12 +9,12 @@ module InstructionMemory(address, to_ctrl, to_rs, to_rt, to_rd, to_shamt, to_fun
 	reg [5:0]to_function; 
 	reg [25:0]to_jump;
 	reg [15:0]to_sign_ext;
-	reg [31:0] my_memory [0:1024];
+	reg [31:0] my_memory [0:50];
 	reg [31:0] tempreg;	
 	reg [31:0] tempaddr;
 	always @ (address) begin
 	 	tempaddr = address;
-		tempaddr = 4;
+		tempaddr /= 4;
 		tempreg = my_memory[tempaddr];
 		to_ctrl = tempreg[31:26];
 		to_rs = tempreg[25:21];
