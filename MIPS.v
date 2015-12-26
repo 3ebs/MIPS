@@ -1,0 +1,56 @@
+module MIPS ;
+	
+	 wire [31:0]pc_input;
+	 wire [31:0]pc_output;
+	 wire [5:0]opcode;
+	 wire[4:0]rs;
+	 wire[4:0]rt;
+	 wire[4:0]rd;
+	 wire[4:0]y; 
+	 wire[4:0]shamt;  
+	 wire[5:0]fcn; 
+	 wire[25:0]jump; 
+	 wire[15:0]immediate;
+	 wire[31:0]im_32;
+	 wire[31:0]ReadData2;
+	 wire[31:0]alu_input_2;
+	 wire[31:0]alu_output;
+	 wire zero, jreg, mem_read, mem_write, branchtomux, branch, jal, notjreg, RegwrAndJreg, reg_write, AluSrc, arith;
+	 wire[2:0]alu_control_signal;
+	 wire[31:0]mem_output;	
+	 wire[31:0]pc4;	
+	 wire[31:0]sll_output;
+	 wire[31:0]out1;
+	 wire[31:0]out2;
+	 wire[31:0]jump_address_output;
+	 wire[31:0]out3;  
+	 wire[1:0]RegDst; 
+	 wire[2:0]alu_op; 
+	 wire[1:0]MemToReg;	
+	 wire clk; 
+	 wire[31:0]ReadData1;
+	 wire[31:0]WriteData;
+	 
+	 PC pc(pc_input, clk, pc_output);
+	 InstructionMemory instruction_memory(pc_output, opcode, rs, rt, rd, shamt, fcn, jump, immediate);
+	 MUX4x1_5 mux1(rt,rd,5'b11111,RegDst,y); 
+	 RegisterFile reg_file(RegwrAndJreg, rs, rt, y, WriteData, ReadData1, ReadData2);
+	 SignExtension sign_extn(immediate, arith, im_32);
+	 MUX2_1 mux2(ReadData2, im_32, AluSrc, alu_input_2);
+	 ALU alu(ReadData1 ,alu_input_2 ,shamt ,alu_control_signal , alu_output ,zero);
+	 alu_control alucontrol(alu_op ,fcn ,alu_control_signal , jreg); 
+	 DataMemory data_memory(alu_output, ReadData2, mem_output, mem_read, mem_write);
+	 MUX4x1_32 mux3(alu_output,mem_output,pc4,MemToReg,WriteData); 
+	 ADD_PC_4 addpc4(pc_output, pc4);
+	 shift_left_2 sll2(im_32, sll_output); 
+	 ADD add234(sll_output, pc4, out1);	  
+	 MUX2_1 muxcv(pc4, out1, branchtomux, out2); 
+	 and and1(branchtomux, branch, zero);
+	 jumpAddress jumpaddr(jump, jump_address_output, pc4);
+	 MUX2_1 muxcvw(out2, jump_address_output, jal, out3); 
+	 MUX2_1 muxbvw(out3, ReadData1, jreg, pc_input); 
+	 not not1(notjreg, jreg);
+	 and and2(RegwrAndJreg, notjreg, reg_write);  
+	 control_unit control(opcode, reg_write, RegDst, AluSrc, alu_op, branch, mem_write, mem_read, MemToReg, jal, arith);	  
+	 
+endmodule
