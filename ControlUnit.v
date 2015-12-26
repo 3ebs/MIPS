@@ -1,3 +1,4 @@
+
 module control_unit(OpCode, RegWrite, RegDst, AluSrc, AluOp, branch, MemWrite, MemRead, MemToReg, jump, arith);
 	input [5:0]OpCode;
 	output RegWrite, jump, branch, MemRead, MemWrite, AluSrc, arith;
@@ -10,7 +11,7 @@ module control_unit(OpCode, RegWrite, RegDst, AluSrc, AluOp, branch, MemWrite, M
 	reg [1:0]MemToReg;
 	always @(OpCode)
 		case(OpCode)
-			6'b000000 : begin//Rtype 
+			6'b000000 : begin//Rtype
 				RegWrite=1;
 				RegDst=2'b01;
 				AluSrc=0;
@@ -18,10 +19,10 @@ module control_unit(OpCode, RegWrite, RegDst, AluSrc, AluOp, branch, MemWrite, M
 				branch=0;
 				MemWrite=0;
 				MemRead=0;
-				MemToReg=2'b00;
+				MemToReg=2'b01;
 				jump=0;
 				arith = 1'bx;
-			end	
+			end	 
 			6'b001000 : begin//addi 
 				RegWrite=1;
 				RegDst=2'b00;
@@ -30,7 +31,7 @@ module control_unit(OpCode, RegWrite, RegDst, AluSrc, AluOp, branch, MemWrite, M
 				branch=0;
 				MemWrite=0;
 				MemRead=0;
-				MemToReg=2'b00;
+				MemToReg=2'b01;
 				jump=0;
 			    	arith = 1;
 			end
@@ -42,7 +43,7 @@ module control_unit(OpCode, RegWrite, RegDst, AluSrc, AluOp, branch, MemWrite, M
 				branch=0;
 				MemWrite=0;
 				MemRead=0;
-				MemToReg=2'b00;
+				MemToReg=2'b01;
 			    	jump=0;
 			    	arith = 0;
 			end
@@ -55,8 +56,8 @@ module control_unit(OpCode, RegWrite, RegDst, AluSrc, AluOp, branch, MemWrite, M
 				MemWrite=0;
 				MemRead=0;
 				MemToReg=2'bxx;
-			    jump=0;
-			    arith = 1'b0;
+			    	jump=0;
+			    	arith = 1'bx;
 			end
 			6'b000011 : begin//jal 
 				RegWrite=1;
@@ -78,9 +79,9 @@ module control_unit(OpCode, RegWrite, RegDst, AluSrc, AluOp, branch, MemWrite, M
 				branch=0;
 				MemWrite=0;
 				MemRead=1;
-				MemToReg=2'b01;
+				MemToReg=2'b00;
 				jump=0;
-				arith = 1'b1;
+				arith = 1'bx;
 			end	
 			6'b101011 : begin//sw 
 				RegWrite=0;
@@ -90,9 +91,10 @@ module control_unit(OpCode, RegWrite, RegDst, AluSrc, AluOp, branch, MemWrite, M
 				branch=0;
 				MemWrite=1;
 				MemRead=0;
-				MemToReg=2'bxx;
+				MemToReg=1'bx;
 				jump=0;
-				arith = 1'b1;
-			end				  
+				arith = 1'bx;
+			end
 		endcase
 	endmodule
+	
