@@ -14,7 +14,7 @@ module InstructionMemory(address, to_ctrl, to_rs, to_rt, to_rd, to_shamt, to_fun
 	reg [31:0] tempaddr;
 	always @ (address) begin
 	 	tempaddr = address;
-		tempaddr /= 4;
+		tempaddr = 4;
 		tempreg = my_memory[tempaddr];
 		to_ctrl = tempreg[31:26];
 		to_rs = tempreg[25:21];
