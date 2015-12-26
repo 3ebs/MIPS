@@ -9,7 +9,7 @@ module DataMemory (addr, data_in, data_out, rd, wr);
 		tempaddr = addr;
 		tempaddr /= 4;
 		if (wr &!rd) 
-			my_memory[tempaddr] <=  data_in;
+			my_memory[tempaddr] <= data_in;
 		else if  (!wr & rd) 
 			data_out =  my_memory[tempaddr];
 			$writememb ("D_memory.list", my_memory);
