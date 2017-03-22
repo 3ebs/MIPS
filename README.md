@@ -1,1 +1,1 @@
-# MIPS
+# MIPS Processor Simulation Project
